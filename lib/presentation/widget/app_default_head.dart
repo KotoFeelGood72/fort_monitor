@@ -12,6 +12,7 @@ class AppDefaultHead extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       shadowColor: Colors.transparent,
       scrolledUnderElevation: 0,
+      centerTitle: true,
       title: Text(
         title,
         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),

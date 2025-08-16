@@ -3,12 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:fort_monitor/presentation/theme/app_colors.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
 
+/// Виджет для отображения счетчиков гарантии
+///
+/// Параметр [showOnlyKeys] позволяет фильтровать отображаемые счетчики:
+/// - `null` или пустой массив - показывать все счетчики
+/// - `['completed_works']` - показывать только "Гарантийный счетчик на выполненные работы"
+/// - `['spare_part']` - показывать только "Гарантийный счетчик запасной части"
+/// - `['spare_part', 'completed_works']` - показывать оба счетчика
 class CustomWarrantyCounter extends StatefulWidget {
   final String? selectedType;
   final Function(String?)? onTypeChanged;
   final Map<String, Map<String, String>> warrantyValues;
   final Function(String, String, String)? onValuesChanged;
   final bool single;
+  final List<String>? showOnlyKeys;
 
   const CustomWarrantyCounter({
     super.key,
@@ -17,6 +25,7 @@ class CustomWarrantyCounter extends StatefulWidget {
     required this.warrantyValues,
     this.onValuesChanged,
     this.single = false,
+    this.showOnlyKeys,
   });
 
   @override
@@ -369,8 +378,18 @@ class _CustomWarrantyCounterState extends State<CustomWarrantyCounter> {
 
   @override
   Widget build(BuildContext context) {
+    // Фильтруем записи в зависимости от параметра showOnlyKeys
+    final filteredEntries = widget.warrantyValues.entries.where((entry) {
+      if (widget.showOnlyKeys != null && widget.showOnlyKeys!.isNotEmpty) {
+        // Показываем только указанные ключи
+        return widget.showOnlyKeys!.contains(entry.key);
+      }
+      // Показываем все записи
+      return true;
+    }).toList();
+
     return Column(
-      children: widget.warrantyValues.entries.map((entry) {
+      children: filteredEntries.map((entry) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 17),
           child: _buildTimeInputs(entry.key, entry.value['label'] ?? entry.key),

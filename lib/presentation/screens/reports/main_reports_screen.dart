@@ -34,8 +34,7 @@ class _MainReportsScreenState extends State<MainReportsScreen> {
   @override
   Widget build(BuildContext context) {
     return AppLayouts(
-      headType: 'default',
-      title: 'ООО Название',
+      headType: 'single',
       body: Container(
         padding: const EdgeInsets.only(left: 25, right: 25, top: 32, bottom: 0),
         child: SingleChildScrollView(
@@ -43,13 +42,13 @@ class _MainReportsScreenState extends State<MainReportsScreen> {
             children: [
               Container(
                 alignment: Alignment.center,
-                margin: const EdgeInsets.symmetric(vertical: 30),
+                margin: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
                   'Отчеты по автомобилю',
                   style: AppFonts.jostRegular.copyWith(fontSize: 20),
                 ),
               ),
-              SizedBox(height: 38),
+              SizedBox(height: 20),
               Column(
                 children: reportsItems.map((item) {
                   return Padding(

@@ -10,6 +10,8 @@ export 'custom_textarea.dart';
 export 'custom_date_input.dart';
 // Экспорт CustomCalendar
 export 'custom_calendar.dart';
+// Экспорт CustomRadioGroup
+export 'custom_radio_group.dart';
 
 enum InputType { text, number, phone, date }
 

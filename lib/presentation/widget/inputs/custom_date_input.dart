@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fort_monitor/presentation/theme/app_colors.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
-import 'package:fort_monitor/presentation/widget/icons.dart' as custom_icons;
 import 'package:fort_monitor/presentation/widget/inputs/custom_calendar.dart';
 
-class CustomDateInput extends StatelessWidget {
+class CustomDateInput extends StatefulWidget {
   final String label;
   final String? hintText;
   final String? initialValue;
@@ -34,8 +33,13 @@ class CustomDateInput extends StatelessWidget {
     this.onDateRangeSelected,
   });
 
+  @override
+  State<CustomDateInput> createState() => _CustomDateInputState();
+}
+
+class _CustomDateInputState extends State<CustomDateInput> {
   String? _getDefaultValidator(String? value) {
-    if (isRequired && (value == null || value.trim().isEmpty)) {
+    if (widget.isRequired && (value == null || value.trim().isEmpty)) {
       return 'Это поле обязательно для заполнения';
     }
     if (value != null && value.isNotEmpty) {
@@ -44,6 +48,37 @@ class CustomDateInput extends StatelessWidget {
       }
     }
     return null;
+  }
+
+  String _getDisplayText() {
+    // Если есть текст в контроллере, показываем его
+    if (widget.controller?.text.isNotEmpty == true) {
+      return widget.controller!.text;
+    }
+
+    // Если есть начальное значение, показываем его
+    if (widget.initialValue != null && widget.initialValue!.isNotEmpty) {
+      return widget.initialValue!;
+    }
+
+    // Если есть startDate и endDate, форматируем их
+    if (widget.startDate != null && widget.endDate != null) {
+      final startStr =
+          '${widget.startDate!.day.toString().padLeft(2, '0')}.${widget.startDate!.month.toString().padLeft(2, '0')}.${widget.startDate!.year}';
+      final endStr =
+          '${widget.endDate!.day.toString().padLeft(2, '0')}.${widget.endDate!.month.toString().padLeft(2, '0')}.${widget.endDate!.year}';
+      return '$startStr - $endStr';
+    }
+
+    // Если есть только startDate, показываем его
+    if (widget.startDate != null) {
+      final startStr =
+          '${widget.startDate!.day.toString().padLeft(2, '0')}.${widget.startDate!.month.toString().padLeft(2, '0')}.${widget.startDate!.year}';
+      return startStr;
+    }
+
+    // По умолчанию показываем hintText
+    return widget.hintText ?? 'Выберите дату';
   }
 
   void _showCalendarModal(BuildContext context) {
@@ -61,16 +96,17 @@ class CustomDateInput extends StatelessWidget {
           ),
         ),
         child: CustomCalendar(
-          startDate: startDate,
-          endDate: endDate,
+          startDate: widget.startDate,
+          endDate: widget.endDate,
           onDateRangeSelected: (start, end) {
-            onDateRangeSelected?.call(start, end);
-            if (controller != null && start != null && end != null) {
+            widget.onDateRangeSelected?.call(start, end);
+            if (widget.controller != null && start != null && end != null) {
               final startStr =
                   '${start.day.toString().padLeft(2, '0')}.${start.month.toString().padLeft(2, '0')}.${start.year}';
               final endStr =
                   '${end.day.toString().padLeft(2, '0')}.${end.month.toString().padLeft(2, '0')}.${end.year}';
-              controller!.text = '$startStr - $endStr';
+              widget.controller!.text = '$startStr - $endStr';
+              setState(() {});
             }
           },
         ),
@@ -80,62 +116,62 @@ class CustomDateInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultValidator = _getDefaultValidator;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 15,
       children: [
-        if (label.isNotEmpty)
+        if (widget.label.isNotEmpty)
           Text(
-            label + (isRequired ? ' *' : ''),
+            widget.label + (widget.isRequired ? ' *' : ''),
             style: AppFonts.jostMedium.copyWith(
               color: Colors.black,
               fontSize: 14,
             ),
           ),
-        if (label.isNotEmpty) const SizedBox(height: 10),
-        GestureDetector(
-          onTap: enabled
-              ? () {
-                  if (onTap != null) {
-                    onTap!();
-                  } else {
-                    _showCalendarModal(context);
+        Expanded(
+          child: GestureDetector(
+            onTap: widget.enabled
+                ? () {
+                    if (widget.onTap != null) {
+                      widget.onTap!();
+                    } else {
+                      _showCalendarModal(context);
+                    }
                   }
-                }
-              : null,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.greyCard,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: TextFormField(
-              controller: controller,
-              initialValue: controller == null ? initialValue : null,
-              keyboardType: TextInputType.datetime,
-              onChanged: onChanged,
-              validator: validator ?? defaultValidator,
-              enabled: false, // Делаем поле неактивным для прямого ввода
-              decoration: InputDecoration(
-                hintText: hintText ?? 'Выберите дату',
-                filled: false,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: custom_icons.Icons(
-                    iconName: 'datePicker',
-                    size: 20,
-                    color: Colors.black,
-                  ),
-                ),
+                : null,
+            child: Container(
+              width: double.infinity,
+              height: 30,
+              decoration: BoxDecoration(
+                color: AppColors.greyCard,
+                borderRadius: BorderRadius.circular(20),
               ),
-              style: AppFonts.jostMedium.copyWith(
-                fontSize: 14,
-                color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          _getDisplayText(),
+                          style: AppFonts.jostRegular.copyWith(
+                            fontSize: 14,
+                            color:
+                                _getDisplayText() !=
+                                    (widget.hintText ?? 'Выберите дату')
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/images/date_picker.png',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

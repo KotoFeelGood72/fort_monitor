@@ -7,8 +7,11 @@ class CustomRadioGroup<T> extends StatelessWidget {
   final List<RadioOption<T>> options;
   final T? selectedValue;
   final Function(T?) onChanged;
-  final bool enabled;
   final bool isRequired;
+  final bool showInput;
+  final String? inputHint;
+  final String? inputValue;
+  final Function(String)? onInputChanged;
 
   const CustomRadioGroup({
     super.key,
@@ -16,17 +19,52 @@ class CustomRadioGroup<T> extends StatelessWidget {
     required this.options,
     required this.selectedValue,
     required this.onChanged,
-    this.enabled = true,
     this.isRequired = false,
+    this.showInput = false,
+    this.inputHint,
+    this.inputValue,
+    this.onInputChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...options.map((option) => _buildRadioOption(option)).toList(),
+        if (label != null && label!.isNotEmpty)
+          Text(
+            label! + (isRequired ? ' *' : ''),
+            style: AppFonts.jostMedium.copyWith(color: Colors.black),
+          ),
+        if (label != null && label!.isNotEmpty) const SizedBox(height: 12),
+
+        // Radio options
+        Column(
+          children: options.map((option) => _buildRadioOption(option)).toList(),
+        ),
+
+        // Input field (shown when showInput is true and an option is selected)
+        if (selectedValue != null) ...[
+          const SizedBox(height: 10),
+          Container(
+            height: 44,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+            decoration: BoxDecoration(
+              color: AppColors.greyCard,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              options
+                  .firstWhere((option) => option.value == selectedValue)
+                  .label,
+              style: AppFonts.jostRegular.copyWith(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -35,10 +73,10 @@ class CustomRadioGroup<T> extends StatelessWidget {
     final isSelected = selectedValue == option.value;
 
     return GestureDetector(
-      onTap: enabled ? () => onChanged(option.value) : null,
+      onTap: () => onChanged(option.value),
       child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
         child: Row(
-          spacing: 7,
           children: [
             Container(
               width: 18,
@@ -46,25 +84,22 @@ class CustomRadioGroup<T> extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: enabled
-                      ? (isSelected ? Colors.black : Colors.grey[400]!)
-                      : Colors.grey[300]!,
+                  color: isSelected ? Colors.black : Colors.grey[400]!,
                   width: 1,
                 ),
-                color: enabled && isSelected
-                    ? Colors.black
-                    : Colors.transparent,
+                color: isSelected ? Colors.black : Colors.transparent,
               ),
+              // child: isSelected
+              //     ? const Icon(Icons.check, size: 12, color: Colors.white)
+              //     : null,
             ),
-
+            const SizedBox(width: 7),
             Expanded(
               child: Text(
                 option.label,
                 style: AppFonts.jostMedium.copyWith(
                   fontSize: 14,
-                  color: enabled
-                      ? (isSelected ? Colors.black : AppColors.grey)
-                      : AppColors.grey,
+                  color: isSelected ? Colors.black : AppColors.grey,
                 ),
               ),
             ),

@@ -29,14 +29,14 @@ class _MainCareScreenState extends State<MainCareScreen> {
   String? selectedSize;
   String? selectedWarrantyType;
   String? selectedParameter;
-  String? selectedFileName = 'Счет №935385.pdf';
+  String? selectedFileName;
   final List<String> parameters = ['Параметр 1', 'Параметр 2', 'Параметр 3'];
   Map<String, Map<String, String>> warrantyValues = {
     'spare_part': {
       'label': 'Гарантийный счетчик запасной части',
-      'hour': '14',
-      'month': '03',
-      'year': '27',
+      'hour': '',
+      'month': '',
+      'year': '',
     },
     'completed_works': {
       'label': 'Гарантийный счетчик на выполненные работы',
@@ -53,19 +53,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
   final dateController = TextEditingController();
   final recipientNameController = TextEditingController();
   final recipientPhoneController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    selectedServiceType = 'sto';
-    phoneController.text = '+79000000000';
-    addressController.text = 'Садовая, д. 5, корп. 16';
-    costController.text = '15000';
-    workCostController.text = '2000';
-    dateController.text = '15.04.2025';
-    recipientNameController.text = 'Иванов Иван Иванович';
-    recipientPhoneController.text = '+79000000000';
-  }
+  final partNameController = TextEditingController();
 
   @override
   void dispose() {
@@ -77,6 +65,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
     dateController.dispose();
     recipientNameController.dispose();
     recipientPhoneController.dispose();
+    partNameController.dispose();
     super.dispose();
   }
 
@@ -84,7 +73,6 @@ class _MainCareScreenState extends State<MainCareScreen> {
   Widget build(BuildContext context) {
     return AppLayouts(
       headType: 'single',
-      title: 'TC ',
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -99,6 +87,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
               ),
             ),
             CustomSelect(
+              label: 'Вид услуги',
               selectedValue: selectedParameter,
               hintText: 'Выберите параметр',
               items: parameters,
@@ -108,8 +97,8 @@ class _MainCareScreenState extends State<MainCareScreen> {
                 });
               },
             ),
+            SizedBox(height: 25),
             CustomRadioGroup(
-              label: 'Тип сервиса',
               selectedValue: selectedServiceType,
               onChanged: (value) {
                 setState(() {
@@ -121,12 +110,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
                 RadioOption(label: 'Сервисный центр', value: 'service_center'),
               ],
             ),
-            CustomInput(
-              label: '',
-              type: InputType.text,
-              controller: addressController,
-              hintText: '',
-            ),
+            SizedBox(height: 15),
             CustomInput(
               label: 'Номер телефона',
               type: InputType.phone,
@@ -134,6 +118,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 15),
             CustomInput(
               label: 'Адрес',
               type: InputType.text,
@@ -141,13 +126,15 @@ class _MainCareScreenState extends State<MainCareScreen> {
               hintText: 'Введите адрес',
               isRequired: true,
             ),
+            SizedBox(height: 15),
             CustomInput(
               label: 'Стоимость работ по замене',
               type: InputType.text,
-              controller: addressController,
-              hintText: '',
+              controller: workCostController,
+              hintText: 'Введите стоимость',
               isRequired: true,
             ),
+            SizedBox(height: 21),
             CustomCheckbox(
               label: 'добавлять в общую калькуляцию затрат ТС',
               controller: checkboxController,
@@ -155,6 +142,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
                 print('Checkbox changed: $value');
               },
             ),
+            SizedBox(height: 33),
             CustomInput(
               label: 'Дата замены',
               type: InputType.date,
@@ -162,7 +150,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
               hintText: 'ДД.ММ.ГГГГ',
               isRequired: true,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomInput(
               label: 'ФИО принимающего',
               type: InputType.text,
@@ -170,7 +158,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
               hintText: 'Введите ФИО',
               isRequired: true,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomInput(
               label: 'Телефон принимающего',
               type: InputType.phone,
@@ -178,9 +166,11 @@ class _MainCareScreenState extends State<MainCareScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 30),
             CustomWarrantyCounter(
               selectedType: selectedWarrantyType,
               warrantyValues: warrantyValues,
+              showOnlyKeys: ['completed_works'],
               onTypeChanged: (type) {
                 setState(() {
                   selectedWarrantyType = type;
@@ -195,7 +185,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
                 print('Warranty values changed: $type - $hour:$month');
               },
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // File Upload
             CustomFileUpload(
@@ -215,20 +205,14 @@ class _MainCareScreenState extends State<MainCareScreen> {
               },
               isRequired: true,
             ),
-            SizedBox(height: 34),
+            const SizedBox(height: 34),
 
             SaveButton(
               onPressed: () {
                 print('Form saved');
               },
             ),
-            CustomInput(
-              label: 'Наименование детали ',
-              type: InputType.text,
-              controller: addressController,
-              hintText: '',
-              isRequired: true,
-            ),
+            SizedBox(height: 31),
           ],
         ),
       ),

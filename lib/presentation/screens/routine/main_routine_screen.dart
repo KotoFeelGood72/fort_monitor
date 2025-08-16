@@ -84,7 +84,6 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
   Widget build(BuildContext context) {
     return AppLayouts(
       headType: 'single',
-      title: 'TC ',
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -99,7 +98,6 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
               ),
             ),
             CustomRadioGroup(
-              label: 'Тип сервиса',
               selectedValue: selectedServiceType,
               onChanged: (value) {
                 setState(() {
@@ -112,12 +110,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
                 RadioOption(label: 'Выездной специалист', value: 'out'),
               ],
             ),
-            CustomInput(
-              label: '',
-              type: InputType.text,
-              controller: addressController,
-              hintText: '',
-            ),
+            SizedBox(height: 12),
             CustomInput(
               label: 'Номер телефона',
               type: InputType.phone,
@@ -125,6 +118,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 10),
             CustomInput(
               label: 'Адрес',
               type: InputType.text,
@@ -132,20 +126,23 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
               hintText: 'Введите адрес',
               isRequired: true,
             ),
+            SizedBox(height: 14),
             CustomTextarea(
               label: 'Наименование ГСМ, расходных материалов',
               controller: addressController,
               hintText: 'Наименование ГСМ, расходных материалов',
               isRequired: true,
-              height: 120,
+              height: 131,
             ),
+            SizedBox(height: 11),
             CustomTextarea(
               label: 'Какие работы выполнялись',
               controller: addressController,
               hintText: 'Какие работы выполнялись',
               isRequired: true,
-              height: 120,
+              height: 131,
             ),
+            SizedBox(height: 16),
             CustomInput(
               label: 'Стоимость работ по замене',
               type: InputType.text,
@@ -153,6 +150,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
               hintText: '',
               isRequired: true,
             ),
+            SizedBox(height: 21),
             CustomCheckbox(
               label: 'добавлять в общую калькуляцию затрат ТС',
               controller: checkboxController,
@@ -160,6 +158,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
                 print('Checkbox changed: $value');
               },
             ),
+            SizedBox(height: 31),
             CustomInput(
               label: 'Дата замены',
               type: InputType.date,
@@ -183,6 +182,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 24),
 
             CustomWarrantyCounter(
               selectedType: selectedWarrantyType,

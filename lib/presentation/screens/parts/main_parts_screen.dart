@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:fort_monitor/presentation/utils/vehicle_storage.dart';
 import 'package:fort_monitor/presentation/widget/app_layouts.dart';
 import 'package:fort_monitor/presentation/widget/inputs/custom_inputs.dart';
-import 'package:fort_monitor/presentation/widget/inputs/custom_selects.dart';
 import 'package:fort_monitor/presentation/widget/inputs/custom_file_upload.dart';
 import 'package:fort_monitor/presentation/widget/inputs/custom_checkbox.dart';
-import 'package:fort_monitor/presentation/widget/inputs/custom_radio_group.dart';
 import 'package:fort_monitor/presentation/widget/inputs/custom_warranty_counter.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
 import 'package:fort_monitor/presentation/widget/save_button.dart';
@@ -22,6 +21,9 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
   // Controllers
   final checkboxController = ValueNotifier<bool>(false);
 
+  // Vehicle storage variables
+  bool _isLoading = true;
+
   // Form values
   String? selectedServiceType;
   String? selectedPartType;
@@ -29,6 +31,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
   String? selectedSize;
   String? selectedWarrantyType;
   String? selectedFileName = 'Счет №935385.pdf';
+  String serviceTypeInputValue = 'СТО';
   Map<String, Map<String, String>> warrantyValues = {
     'spare_part': {
       'label': 'Гарантийный счетчик запасной части',
@@ -44,25 +47,40 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
     },
   };
 
+  // Controllers for each input
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
-  final costController = TextEditingController();
-  final workCostController = TextEditingController();
   final dateController = TextEditingController();
   final recipientNameController = TextEditingController();
   final recipientPhoneController = TextEditingController();
+
+  // New controllers for parts screen
+  final partNameController = TextEditingController();
+  final partNumberController = TextEditingController();
+  final partCostController = TextEditingController();
+  final replacementWorkCostController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     selectedServiceType = 'sto';
-    phoneController.text = '+79000000000';
-    addressController.text = 'Садовая, д. 5, корп. 16';
-    costController.text = '15000';
-    workCostController.text = '2000';
-    dateController.text = '15.04.2025';
-    recipientNameController.text = 'Иванов Иван Иванович';
-    recipientPhoneController.text = '+79000000000';
+
+    // Initialize controllers with empty values
+    phoneController.text = '';
+    addressController.text = '';
+    dateController.text = '';
+    recipientNameController.text = '';
+    recipientPhoneController.text = '';
+
+    // Initialize new controllers
+    partNameController.text = '';
+    partNumberController.text = '';
+    partCostController.text = '';
+    replacementWorkCostController.text = '';
+    serviceTypeInputValue = 'СТО';
+
+    // Initialize SharedPreferences
+    _initializeApp();
   }
 
   @override
@@ -70,19 +88,61 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
     checkboxController.dispose();
     phoneController.dispose();
     addressController.dispose();
-    costController.dispose();
-    workCostController.dispose();
     dateController.dispose();
     recipientNameController.dispose();
     recipientPhoneController.dispose();
+
+    // Dispose new controllers
+    partNameController.dispose();
+    partNumberController.dispose();
+    partCostController.dispose();
+    replacementWorkCostController.dispose();
     super.dispose();
+  }
+
+  // Method to update service type text based on radio selection
+  void _updateServiceTypeText(String? value) {
+    setState(() {
+      selectedServiceType = value;
+      switch (value) {
+        case 'sto':
+          serviceTypeInputValue = 'СТО';
+          break;
+        case 'service_center':
+          serviceTypeInputValue = 'Сервисный центр';
+          break;
+        case 'out':
+          serviceTypeInputValue = 'Выездной специалист';
+          break;
+        default:
+          serviceTypeInputValue = '';
+      }
+    });
+  }
+
+  // Vehicle storage methods
+  Future<void> _initializeApp() async {
+    try {
+      await VehicleStorage.initialize();
+    } catch (e) {
+      debugPrint('Ошибка инициализации VehicleStorage: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return AppLayouts(
       headType: 'single',
-      title: 'TC',
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -97,9 +157,9 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
               ),
             ),
             CustomInput(
-              label: 'Наименование детали ',
+              label: 'Наименование детали',
               type: InputType.text,
-              controller: addressController,
+              controller: partNameController,
               hintText: '',
               isRequired: true,
             ),
@@ -107,7 +167,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             CustomInput(
               label: 'Номенклатурный номер',
               type: InputType.text,
-              controller: addressController,
+              controller: partNumberController,
               hintText: '',
               isRequired: true,
             ),
@@ -115,7 +175,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             CustomInput(
               label: 'Стоимость',
               type: InputType.text,
-              controller: addressController,
+              controller: partCostController,
               hintText: '',
               isRequired: true,
             ),
@@ -123,7 +183,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             CustomInput(
               label: 'Стоимость работ по замене',
               type: InputType.text,
-              controller: addressController,
+              controller: replacementWorkCostController,
               hintText: '',
               isRequired: true,
             ),
@@ -139,23 +199,12 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             CustomRadioGroup(
               label: 'Тип сервиса',
               selectedValue: selectedServiceType,
-              onChanged: (value) {
-                setState(() {
-                  selectedServiceType = value;
-                });
-              },
+              onChanged: _updateServiceTypeText,
               options: const [
                 RadioOption(label: 'СТО', value: 'sto'),
                 RadioOption(label: 'Сервисный центр', value: 'service_center'),
                 RadioOption(label: 'Выездной специалист', value: 'out'),
               ],
-            ),
-            SizedBox(height: 21),
-            CustomInput(
-              label: '',
-              type: InputType.text,
-              controller: addressController,
-              hintText: '',
             ),
             SizedBox(height: 17),
             CustomInput(
@@ -201,6 +250,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             CustomWarrantyCounter(
               selectedType: selectedWarrantyType,
               warrantyValues: warrantyValues,
+              showOnlyKeys: ['spare_part', 'completed_works'],
               onTypeChanged: (type) {
                 setState(() {
                   selectedWarrantyType = type;
