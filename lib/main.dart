@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fort_monitor/presentation/router/app_router.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
+import 'package:fort_monitor/domain/service/supabase_service.dart';
+import 'package:fort_monitor/presentation/riverpod/supabase_auth_notifier.dart';
 
-void main() {
-  runApp(FortMonitorApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Инициализация Supabase
+  await SupabaseService.initialize();
+
+  runApp(const ProviderScope(child: FortMonitorApp()));
 }
 
-class FortMonitorApp extends StatelessWidget {
-  FortMonitorApp({super.key});
-  final _appRouter = AppRouter();
+class FortMonitorApp extends ConsumerWidget {
+  const FortMonitorApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _appRouter = AppRouter();
+
     return MaterialApp.router(
       title: 'Fort Monitor',
       theme: ThemeData(

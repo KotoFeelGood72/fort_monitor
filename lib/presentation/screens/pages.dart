@@ -11,3 +11,9 @@ export 'developer/main_developer_screen.dart';
 export 'developer/single_developer_screen.dart';
 export 'profile/main_profile_screen.dart';
 export 'profile/single_profile_screen.dart';
+
+// Импорты экранов авторизации
+export 'auth/auth_screen.dart';
+export 'auth/login_screen.dart';
+export 'auth/register_screen.dart';
+export 'auth/password_change_screen.dart';

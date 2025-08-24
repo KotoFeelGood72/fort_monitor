@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fort_monitor/presentation/screens/pages.dart';
+import 'package:fort_monitor/presentation/router/auth_router.dart';
 
 part 'app_router.gr.dart';
 
@@ -8,8 +9,16 @@ part 'app_router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
+    // Главный роутер с проверкой авторизации
+    AutoRoute(path: '/', page: AuthRouterRoute.page, initial: true),
+
+    // Экраны авторизации
+    AutoRoute(path: '/login', page: LoginScreenRoute.page),
+    AutoRoute(path: '/register', page: RegisterScreenRoute.page),
+    AutoRoute(path: '/password-change', page: PasswordChangeScreenRoute.page),
+
     // Главные экраны
-    AutoRoute(path: '/', page: MainScreenRoute.page, initial: true),
+    AutoRoute(path: '/main', page: MainScreenRoute.page),
     AutoRoute(path: '/care', page: MainCareScreenRoute.page),
     AutoRoute(path: '/parts', page: MainPartsScreenRoute.page),
     AutoRoute(path: '/repair', page: MainRepairScreenRoute.page),

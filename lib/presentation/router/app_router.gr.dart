@@ -11,6 +11,54 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [AuthRouter]
+class AuthRouterRoute extends PageRouteInfo<void> {
+  const AuthRouterRoute({List<PageRouteInfo>? children})
+    : super(AuthRouterRoute.name, initialChildren: children);
+
+  static const String name = 'AuthRouterRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AuthRouter();
+    },
+  );
+}
+
+/// generated route for
+/// [AuthScreen]
+class AuthScreenRoute extends PageRouteInfo<void> {
+  const AuthScreenRoute({List<PageRouteInfo>? children})
+    : super(AuthScreenRoute.name, initialChildren: children);
+
+  static const String name = 'AuthScreenRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AuthScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [LoginScreen]
+class LoginScreenRoute extends PageRouteInfo<void> {
+  const LoginScreenRoute({List<PageRouteInfo>? children})
+    : super(LoginScreenRoute.name, initialChildren: children);
+
+  static const String name = 'LoginScreenRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LoginScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [MainCareScreen]
 class MainCareScreenRoute extends PageRouteInfo<void> {
   const MainCareScreenRoute({List<PageRouteInfo>? children})
@@ -166,6 +214,38 @@ class MainTiresScreenRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MainTiresScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [PasswordChangeScreen]
+class PasswordChangeScreenRoute extends PageRouteInfo<void> {
+  const PasswordChangeScreenRoute({List<PageRouteInfo>? children})
+    : super(PasswordChangeScreenRoute.name, initialChildren: children);
+
+  static const String name = 'PasswordChangeScreenRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const PasswordChangeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RegisterScreen]
+class RegisterScreenRoute extends PageRouteInfo<void> {
+  const RegisterScreenRoute({List<PageRouteInfo>? children})
+    : super(RegisterScreenRoute.name, initialChildren: children);
+
+  static const String name = 'RegisterScreenRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RegisterScreen();
     },
   );
 }
