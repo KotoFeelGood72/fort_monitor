@@ -58,13 +58,6 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
   void initState() {
     super.initState();
     selectedServiceType = 'sto';
-    phoneController.text = '+79000000000';
-    addressController.text = 'Садовая, д. 5, корп. 16';
-    costController.text = '15000';
-    workCostController.text = '2000';
-    dateController.text = '15.04.2025';
-    recipientNameController.text = 'Иванов Иван Иванович';
-    recipientPhoneController.text = '+79000000000';
   }
 
   @override
@@ -84,7 +77,6 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
   Widget build(BuildContext context) {
     return AppLayouts(
       headType: 'single',
-      title: 'TC ',
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -99,7 +91,6 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
               ),
             ),
             CustomRadioGroup(
-              label: 'Тип сервиса',
               selectedValue: selectedServiceType,
               onChanged: (value) {
                 setState(() {
@@ -112,13 +103,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
                 RadioOption(label: 'Магазин', value: 'shop'),
               ],
             ),
-
-            CustomInput(
-              label: '',
-              type: InputType.text,
-              controller: addressController,
-              hintText: '',
-            ),
+            SizedBox(height: 15),
 
             CustomInput(
               label: 'Номер телефона',
@@ -127,6 +112,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 10),
             CustomInput(
               label: 'Адрес',
               type: InputType.text,
@@ -134,9 +120,10 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
               hintText: 'Введите адрес',
               isRequired: true,
             ),
+            SizedBox(height: 10),
             CustomSelect(
+              label: 'Вид детали',
               selectedValue: selectedParameter,
-              hintText: 'Вид детали',
               items: parameters,
               onChanged: (String? value) {
                 setState(() {
@@ -144,9 +131,10 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
                 });
               },
             ),
+            SizedBox(height: 10),
             CustomSelect(
+              label: 'Бренд',
               selectedValue: selectedParameter,
-              hintText: 'Бренд',
               items: parameters,
               onChanged: (String? value) {
                 setState(() {
@@ -154,9 +142,10 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
                 });
               },
             ),
+            SizedBox(height: 10),
             CustomSelect(
               selectedValue: selectedParameter,
-              hintText: 'Размер',
+              label: 'Размер',
               items: parameters,
               onChanged: (String? value) {
                 setState(() {
@@ -164,6 +153,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
                 });
               },
             ),
+            SizedBox(height: 10),
             CustomInput(
               label: 'Стоимость',
               type: InputType.text,
@@ -171,6 +161,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
               hintText: '',
               isRequired: true,
             ),
+            SizedBox(height: 10),
             CustomInput(
               label: 'Стоимость работ по замене',
               type: InputType.text,
@@ -178,6 +169,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
               hintText: '',
               isRequired: true,
             ),
+            SizedBox(height: 22),
             CustomCheckbox(
               label: 'добавлять в общую калькуляцию затрат ТС',
               controller: checkboxController,
@@ -185,6 +177,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
                 print('Checkbox changed: $value');
               },
             ),
+            SizedBox(height: 29),
             CustomInput(
               label: 'Дата замены',
               type: InputType.date,
@@ -208,9 +201,11 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 32),
             CustomWarrantyCounter(
               selectedType: selectedWarrantyType,
               warrantyValues: warrantyValues,
+              showOnlyKeys: ['spare_part'],
               onTypeChanged: (type) {
                 setState(() {
                   selectedWarrantyType = type;

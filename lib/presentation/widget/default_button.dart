@@ -16,16 +16,16 @@ class DefaultButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.greyCard,
-          foregroundColor: Colors.black,
+          backgroundColor: AppColors.grey,
+          foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(text, style: AppFonts.jostRegular.copyWith(fontSize: 16)),
+            Text(text, style: AppFonts.jostMedium.copyWith(fontSize: 16)),
           ],
         ),
       ),

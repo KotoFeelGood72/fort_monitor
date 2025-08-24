@@ -24,9 +24,6 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
 
   // Form values
   String? selectedServiceType;
-  String? selectedPartType;
-  String? selectedBrand;
-  String? selectedSize;
   String? selectedWarrantyType;
   String? selectedFileName = 'Счет №935385.pdf';
   Map<String, Map<String, String>> warrantyValues = {
@@ -44,9 +41,10 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
     },
   };
 
+  // Text controllers
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
-  final costController = TextEditingController();
+  final workDescriptionController = TextEditingController();
   final workCostController = TextEditingController();
   final dateController = TextEditingController();
   final recipientNameController = TextEditingController();
@@ -56,13 +54,6 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
   void initState() {
     super.initState();
     selectedServiceType = 'sto';
-    phoneController.text = '+79000000000';
-    addressController.text = 'Садовая, д. 5, корп. 16';
-    costController.text = '15000';
-    workCostController.text = '2000';
-    dateController.text = '15.04.2025';
-    recipientNameController.text = 'Иванов Иван Иванович';
-    recipientPhoneController.text = '+79000000000';
   }
 
   @override
@@ -70,7 +61,7 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
     checkboxController.dispose();
     phoneController.dispose();
     addressController.dispose();
-    costController.dispose();
+    workDescriptionController.dispose();
     workCostController.dispose();
     dateController.dispose();
     recipientNameController.dispose();
@@ -82,7 +73,6 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
   Widget build(BuildContext context) {
     return AppLayouts(
       headType: 'single',
-      title: 'TC ',
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -97,7 +87,6 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
               ),
             ),
             CustomRadioGroup(
-              label: 'Тип сервиса',
               selectedValue: selectedServiceType,
               onChanged: (value) {
                 setState(() {
@@ -112,18 +101,13 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
             ),
             SizedBox(height: 21),
             CustomInput(
-              label: '',
-              type: InputType.text,
-              controller: addressController,
-              hintText: '',
-            ),
-            CustomInput(
               label: 'Номер телефона',
               type: InputType.phone,
               controller: phoneController,
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 15),
             CustomInput(
               label: 'Адрес',
               type: InputType.text,
@@ -131,20 +115,23 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
               hintText: 'Введите адрес',
               isRequired: true,
             ),
+            SizedBox(height: 15),
             CustomTextarea(
               label: 'Какие работы выполнялись',
-              controller: addressController,
+              controller: workDescriptionController,
               hintText: 'Опишите выполненные работы',
               isRequired: true,
               height: 120,
             ),
+            SizedBox(height: 15),
             CustomInput(
               label: 'Стоимость работ по замене',
               type: InputType.text,
-              controller: addressController,
+              controller: workCostController,
               hintText: '',
               isRequired: true,
             ),
+            SizedBox(height: 15),
             CustomCheckbox(
               label: 'добавлять в общую калькуляцию затрат ТС',
               controller: checkboxController,
@@ -152,6 +139,7 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
                 print('Checkbox changed: $value');
               },
             ),
+            SizedBox(height: 32),
             CustomInput(
               label: 'Дата замены',
               type: InputType.date,
@@ -159,6 +147,7 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
               hintText: 'ДД.ММ.ГГГГ',
               isRequired: true,
             ),
+            SizedBox(height: 15),
             CustomInput(
               label: 'ФИО принимающего',
               type: InputType.text,
@@ -174,6 +163,7 @@ class _MainRepairScreenState extends State<MainRepairScreen> {
               hintText: '+7 (___) ___-__-__',
               isRequired: true,
             ),
+            SizedBox(height: 32),
             CustomWarrantyCounter(
               selectedType: selectedWarrantyType,
               warrantyValues: warrantyValues,
