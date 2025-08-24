@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fort_monitor/presentation/router/app_router.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
 import 'package:fort_monitor/domain/service/supabase_service.dart';
-import 'package:fort_monitor/presentation/riverpod/supabase_auth_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +18,7 @@ class FortMonitorApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _appRouter = AppRouter();
+    final appRouter = AppRouter();
 
     return MaterialApp.router(
       title: 'Fort Monitor',
@@ -39,7 +38,7 @@ class FortMonitorApp extends ConsumerWidget {
           labelSmall: AppFonts.caption,
         ),
       ),
-      routerConfig: _appRouter.config(),
+      routerConfig: appRouter.config(),
     );
   }
 }
