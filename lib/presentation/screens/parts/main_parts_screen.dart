@@ -200,6 +200,12 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
               label: 'Тип сервиса',
               selectedValue: selectedServiceType,
               onChanged: _updateServiceTypeText,
+              showInput: true,
+              inputHint: 'Введите дополнительную информацию',
+              inputValue: '',
+              onInputChanged: (value) {
+                print('Input changed: $value');
+              },
               options: const [
                 RadioOption(label: 'СТО', value: 'sto'),
                 RadioOption(label: 'Сервисный центр', value: 'service_center'),

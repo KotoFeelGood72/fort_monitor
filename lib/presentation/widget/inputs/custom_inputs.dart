@@ -147,7 +147,7 @@ class CustomInput extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             filled: true,
-            fillColor: enabled ? AppColors.greyCard : AppColors.bg,
+            fillColor: enabled ? AppColors.greyCard : AppColors.greyCard,
 
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),

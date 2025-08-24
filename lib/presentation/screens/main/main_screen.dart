@@ -98,7 +98,7 @@ class _MainScreenState extends State<MainScreen> {
 
     return AppLayouts(
       headType: 'default',
-      title: 'ООО Название',
+      title: 'Название',
       body: Container(
         padding: const EdgeInsets.only(left: 25, right: 25, top: 32, bottom: 0),
         child: SingleChildScrollView(

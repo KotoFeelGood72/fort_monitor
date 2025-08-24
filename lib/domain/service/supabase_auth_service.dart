@@ -11,7 +11,8 @@ class SupabaseAuthService {
   static bool get isAuthenticated => currentUser != null;
 
   // Поток изменений состояния авторизации
-  static Stream<AuthState> get authStateChanges => client.auth.onAuthStateChange;
+  static Stream<AuthState> get authStateChanges =>
+      client.auth.onAuthStateChange;
 
   // Регистрация пользователя
   static Future<AuthResponse> signUp({
@@ -49,9 +50,7 @@ class SupabaseAuthService {
 
   // Обновление пароля
   static Future<UserResponse> updatePassword(String newPassword) async {
-    return await client.auth.updateUser(
-      UserAttributes(password: newPassword),
-    );
+    return await client.auth.updateUser(UserAttributes(password: newPassword));
   }
 
   // Получение профиля пользователя
@@ -76,12 +75,29 @@ class SupabaseAuthService {
     await client.from('profiles').update(profileData).eq('id', userId);
   }
 
+  // Обновление метаданных пользователя
+  static Future<UserResponse> updateUserMetadata(
+    Map<String, dynamic> metadata,
+  ) async {
+    return await client.auth.updateUser(UserAttributes(data: metadata));
+  }
+
   // Создание профиля пользователя
   static Future<void> createUserProfile({
     required String userId,
     required Map<String, dynamic> profileData,
   }) async {
     await client.from('profiles').insert({'id': userId, ...profileData});
+  }
+
+  // Удаление профиля пользователя
+  static Future<void> deleteUserProfile(String userId) async {
+    await client.from('profiles').delete().eq('id', userId);
+  }
+
+  // Удаление аккаунта пользователя
+  static Future<void> deleteAccount() async {
+    await client.auth.admin.deleteUser(client.auth.currentUser!.id);
   }
 }
 
@@ -92,7 +108,9 @@ final supabaseAuthServiceProvider = Provider<SupabaseAuthService>((ref) {
 
 // Провайдер для текущего пользователя
 final currentUserProvider = StreamProvider<User?>((ref) {
-  return SupabaseAuthService.authStateChanges.map((event) => event.session?.user);
+  return SupabaseAuthService.authStateChanges.map(
+    (event) => event.session?.user,
+  );
 });
 
 // Провайдер для состояния авторизации

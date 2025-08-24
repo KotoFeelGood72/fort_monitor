@@ -1,11 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:fort_monitor/presentation/router/app_router.dart';
 import 'package:fort_monitor/presentation/theme/app_colors.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
+import 'package:fort_monitor/presentation/screens/developer/main_developer_screen.dart';
 
 class BottomMainBar extends StatelessWidget {
   const BottomMainBar({super.key});
+
+  void _openTelegramSupport(BuildContext context) async {
+    const telegramUrl = 'https://t.me/fort_monitor_support';
+    try {
+      // Пытаемся открыть в Telegram приложении
+      final uri = Uri.parse(telegramUrl);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        // Если не удалось открыть в приложении, открываем в браузере
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка открытия ссылки: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +116,17 @@ class BottomMainBar extends StatelessWidget {
         context.router.push(const MainReportsScreenRoute());
         break;
       case 1:
-        context.router.push(const MainReportsScreenRoute());
+        // Открываем Telegram для техподдержки
+        _openTelegramSupport(context);
         break;
       case 2:
-        context.router.push(const MainDeveloperScreenRoute());
+        // Открываем modal sheet о компании
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const AboutCompanyModal(),
+        );
         break;
       case 3:
         context.router.push(const MainProfileScreenRoute());

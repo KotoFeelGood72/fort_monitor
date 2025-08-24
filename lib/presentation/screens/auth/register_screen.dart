@@ -25,7 +25,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     text: 'Иванов Иван Иванович',
   );
   final _emailController = TextEditingController(text: 'info@mail.ru');
-  final _companyController = TextEditingController(text: 'ООО "Фирма"');
+  final _companyController = TextEditingController(text: 'Фирма');
   final _positionController = TextEditingController(text: 'менеджер');
   final _phoneController = TextEditingController(text: '+70000000000');
   final _passwordController = TextEditingController(text: '*********');

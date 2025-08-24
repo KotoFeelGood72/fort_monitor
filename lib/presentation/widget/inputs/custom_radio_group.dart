@@ -43,8 +43,8 @@ class CustomRadioGroup<T> extends StatelessWidget {
           children: options.map((option) => _buildRadioOption(option)).toList(),
         ),
 
-        // Input field (shown when showInput is true and an option is selected)
-        if (selectedValue != null) ...[
+        // Empty input field (shown when showInput is true)
+        if (showInput) ...[
           const SizedBox(height: 10),
           Container(
             height: 44,
@@ -54,10 +54,17 @@ class CustomRadioGroup<T> extends StatelessWidget {
               color: AppColors.greyCard,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text(
-              options
-                  .firstWhere((option) => option.value == selectedValue)
-                  .label,
+            child: TextField(
+              controller: TextEditingController(text: inputValue ?? ''),
+              onChanged: onInputChanged,
+              decoration: InputDecoration(
+                hintText: inputHint ?? '',
+                border: InputBorder.none,
+                hintStyle: AppFonts.jostRegular.copyWith(
+                  fontSize: 15,
+                  color: AppColors.grey,
+                ),
+              ),
               style: AppFonts.jostRegular.copyWith(
                 fontSize: 15,
                 color: Colors.black,
@@ -89,9 +96,6 @@ class CustomRadioGroup<T> extends StatelessWidget {
                 ),
                 color: isSelected ? Colors.black : Colors.transparent,
               ),
-              // child: isSelected
-              //     ? const Icon(Icons.check, size: 12, color: Colors.white)
-              //     : null,
             ),
             const SizedBox(width: 7),
             Expanded(

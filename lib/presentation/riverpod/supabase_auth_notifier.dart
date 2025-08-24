@@ -155,12 +155,91 @@ class SupabaseAuthNotifier extends StateNotifier<AsyncValue<User?>> {
     }
   }
 
+  Future<void> updateProfile({
+    required String fullName,
+    required String company,
+    required String position,
+    required String phone,
+  }) async {
+    try {
+      _ref.read(authLoadingProvider.notifier).state = true;
+      _ref.read(authErrorProvider.notifier).state = null;
+
+      final currentUser = state.value;
+      if (currentUser == null) {
+        throw Exception('Пользователь не авторизован');
+      }
+
+      // Обновляем метаданные пользователя
+      final userData = {
+        'full_name': fullName,
+        'company': company,
+        'position': position,
+        'phone': phone,
+      };
+
+      // Обновляем профиль в базе данных
+      await SupabaseAuthService.updateUserProfile(
+        userId: currentUser.id,
+        profileData: userData,
+      );
+
+      // Обновляем метаданные пользователя
+      final userResponse = await SupabaseAuthService.updateUserMetadata(
+        userData,
+      );
+
+      if (userResponse.user != null) {
+        // Обновляем состояние с новыми данными
+        state = AsyncValue.data(userResponse.user);
+      }
+    } catch (e) {
+      _ref.read(authErrorProvider.notifier).state = e.toString();
+      rethrow;
+    } finally {
+      _ref.read(authLoadingProvider.notifier).state = false;
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      _ref.read(authLoadingProvider.notifier).state = true;
+      _ref.read(authErrorProvider.notifier).state = null;
+
+      final currentUser = state.value;
+      if (currentUser == null) {
+        throw Exception('Пользователь не авторизован');
+      }
+
+      // Удаляем профиль пользователя из базы данных
+      await SupabaseAuthService.deleteUserProfile(currentUser.id);
+
+      // Удаляем аккаунт пользователя
+      await SupabaseAuthService.deleteAccount();
+
+      state = const AsyncValue.data(null);
+    } catch (e) {
+      _ref.read(authErrorProvider.notifier).state = e.toString();
+      rethrow;
+    } finally {
+      _ref.read(authLoadingProvider.notifier).state = false;
+    }
+  }
+
   bool get isAuthenticated {
     return state.value != null;
   }
 
   User? get currentUser {
     return state.value;
+  }
+
+  // Метод для принудительного обновления состояния
+  void refreshUser() {
+    final currentUser = state.value;
+    if (currentUser != null) {
+      state = AsyncValue.data(currentUser);
+    }
   }
 }
 

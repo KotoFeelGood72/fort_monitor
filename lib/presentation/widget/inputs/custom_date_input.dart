@@ -38,18 +38,6 @@ class CustomDateInput extends StatefulWidget {
 }
 
 class _CustomDateInputState extends State<CustomDateInput> {
-  String? _getDefaultValidator(String? value) {
-    if (widget.isRequired && (value == null || value.trim().isEmpty)) {
-      return 'Это поле обязательно для заполнения';
-    }
-    if (value != null && value.isNotEmpty) {
-      if (!RegExp(r'^\d{2}\.\d{2}\.\d{4}$').hasMatch(value)) {
-        return 'Введите корректную дату (ДД.ММ.ГГГГ)';
-      }
-    }
-    return null;
-  }
-
   String _getDisplayText() {
     // Если есть текст в контроллере, показываем его
     if (widget.controller?.text.isNotEmpty == true) {

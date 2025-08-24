@@ -6,7 +6,18 @@ import 'package:fort_monitor/presentation/theme/app_colors.dart';
 class DefaultButton extends StatelessWidget {
   final Function() onPressed;
   final String text;
-  const DefaultButton({super.key, required this.onPressed, required this.text});
+  final Color? backgroundColor;
+  final Color? textColor;
+  final double? borderRadius;
+
+  const DefaultButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    this.backgroundColor,
+    this.textColor,
+    this.borderRadius,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +27,10 @@ class DefaultButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.grey,
-          foregroundColor: Colors.white,
+          backgroundColor: backgroundColor ?? AppColors.grey,
+          foregroundColor: textColor ?? Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(borderRadius ?? 10),
           ),
         ),
         child: Row(
