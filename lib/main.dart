@@ -7,8 +7,13 @@ import 'package:fort_monitor/domain/service/supabase_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Инициализация Supabase
-  await SupabaseService.initialize();
+  try {
+    // Инициализация Supabase
+    await SupabaseService.initialize();
+  } catch (e) {
+    debugPrint('Ошибка инициализации Supabase: $e');
+    // Продолжаем запуск приложения даже при ошибке Supabase
+  }
 
   runApp(const ProviderScope(child: FortMonitorApp()));
 }

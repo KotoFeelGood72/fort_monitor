@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fort_monitor/domain/service/supabase_auth_service.dart';
 
@@ -17,10 +18,15 @@ class SupabaseAuthNotifier extends StateNotifier<AsyncValue<User?>> {
   }
 
   void _initializeAuth() {
-    final user = SupabaseAuthService.currentUser;
-    if (user != null) {
-      state = AsyncValue.data(user);
-    } else {
+    try {
+      final user = SupabaseAuthService.currentUser;
+      if (user != null) {
+        state = AsyncValue.data(user);
+      } else {
+        state = const AsyncValue.data(null);
+      }
+    } catch (e) {
+      debugPrint('Ошибка инициализации авторизации: $e');
       state = const AsyncValue.data(null);
     }
   }
@@ -73,10 +79,7 @@ class SupabaseAuthNotifier extends StateNotifier<AsyncValue<User?>> {
     }
   }
 
-  Future<void> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signIn({required String email, required String password}) async {
     try {
       _ref.read(authLoadingProvider.notifier).state = true;
       _ref.read(authErrorProvider.notifier).state = null;
@@ -89,11 +92,29 @@ class SupabaseAuthNotifier extends StateNotifier<AsyncValue<User?>> {
       if (response.user != null) {
         state = AsyncValue.data(response.user);
       } else {
-        _ref.read(authErrorProvider.notifier).state = 'Неверный email или пароль';
+        _ref.read(authErrorProvider.notifier).state =
+            'Неверный email или пароль';
       }
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
-      _ref.read(authErrorProvider.notifier).state = e.toString();
+
+      // Улучшенная обработка ошибок
+      String errorMessage = 'Ошибка авторизации';
+
+      if (e.toString().contains('Failed host lookup')) {
+        errorMessage =
+            'Ошибка подключения к серверу. Проверьте интернет-соединение.';
+      } else if (e.toString().contains('Invalid login credentials')) {
+        errorMessage = 'Неверный email или пароль';
+      } else if (e.toString().contains('Email not confirmed')) {
+        errorMessage = 'Email не подтвержден. Проверьте почту.';
+      } else if (e.toString().contains('Too many requests')) {
+        errorMessage = 'Слишком много попыток входа. Попробуйте позже.';
+      } else {
+        errorMessage = 'Ошибка авторизации: ${e.toString()}';
+      }
+
+      _ref.read(authErrorProvider.notifier).state = errorMessage;
     } finally {
       _ref.read(authLoadingProvider.notifier).state = false;
     }
@@ -146,8 +167,8 @@ class SupabaseAuthNotifier extends StateNotifier<AsyncValue<User?>> {
 // Провайдер для SupabaseAuthNotifier
 final supabaseAuthNotifierProvider =
     StateNotifierProvider<SupabaseAuthNotifier, AsyncValue<User?>>((ref) {
-  return SupabaseAuthNotifier(ref);
-});
+      return SupabaseAuthNotifier(ref);
+    });
 
 // Провайдеры для удобного доступа к состоянию
 final isAuthenticatedProvider2 = Provider<bool>((ref) {
