@@ -59,6 +59,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
   final partNumberController = TextEditingController();
   final partCostController = TextEditingController();
   final replacementWorkCostController = TextEditingController();
+  final serviceTypeInputController = TextEditingController();
 
   @override
   void initState() {
@@ -97,6 +98,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
     partNumberController.dispose();
     partCostController.dispose();
     replacementWorkCostController.dispose();
+    serviceTypeInputController.dispose();
     super.dispose();
   }
 
@@ -202,7 +204,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
               onChanged: _updateServiceTypeText,
               showInput: true,
               inputHint: 'Введите дополнительную информацию',
-              inputValue: '',
+              inputController: serviceTypeInputController,
               onInputChanged: (value) {
                 print('Input changed: $value');
               },

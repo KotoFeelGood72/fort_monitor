@@ -157,7 +157,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
             CustomInput(
               label: 'Стоимость',
               type: InputType.text,
-              controller: addressController,
+              controller: costController,
               hintText: '',
               isRequired: true,
             ),
@@ -165,7 +165,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
             CustomInput(
               label: 'Стоимость работ',
               type: InputType.text,
-              controller: addressController,
+              controller: workCostController,
               hintText: '',
               isRequired: true,
             ),

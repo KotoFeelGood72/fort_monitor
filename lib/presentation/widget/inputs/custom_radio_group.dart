@@ -11,6 +11,7 @@ class CustomRadioGroup<T> extends StatelessWidget {
   final bool showInput;
   final String? inputHint;
   final String? inputValue;
+  final TextEditingController? inputController;
   final Function(String)? onInputChanged;
 
   const CustomRadioGroup({
@@ -23,6 +24,7 @@ class CustomRadioGroup<T> extends StatelessWidget {
     this.showInput = false,
     this.inputHint,
     this.inputValue,
+    this.inputController,
     this.onInputChanged,
   });
 
@@ -55,7 +57,7 @@ class CustomRadioGroup<T> extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: TextField(
-              controller: TextEditingController(text: inputValue ?? ''),
+              controller: inputController ?? TextEditingController(text: inputValue ?? ''),
               onChanged: onInputChanged,
               decoration: InputDecoration(
                 hintText: inputHint ?? '',

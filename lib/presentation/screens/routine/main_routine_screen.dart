@@ -53,11 +53,13 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
   final dateController = TextEditingController();
   final recipientNameController = TextEditingController();
   final recipientPhoneController = TextEditingController();
+  final gsmMaterialsController = TextEditingController();
+  final worksPerformedController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    selectedServiceType = 'sto';
+    selectedServiceType = 'Сервисный центр';
     phoneController.text = '+79000000000';
     addressController.text = 'Садовая, д. 5, корп. 16';
     costController.text = '15000';
@@ -77,6 +79,8 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
     dateController.dispose();
     recipientNameController.dispose();
     recipientPhoneController.dispose();
+    gsmMaterialsController.dispose();
+    worksPerformedController.dispose();
     super.dispose();
   }
 
@@ -128,7 +132,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
             SizedBox(height: 14),
             CustomTextarea(
               label: 'Наименование ГСМ, расходных материалов',
-              controller: addressController,
+              controller: gsmMaterialsController,
               hintText: 'Наименование ГСМ, расходных материалов',
               isRequired: true,
               height: 131,
@@ -136,7 +140,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
             SizedBox(height: 11),
             CustomTextarea(
               label: 'Какие работы выполнялись',
-              controller: addressController,
+              controller: worksPerformedController,
               hintText: 'Какие работы выполнялись',
               isRequired: true,
               height: 131,
@@ -145,7 +149,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
             CustomInput(
               label: 'Стоимость работ',
               type: InputType.text,
-              controller: addressController,
+              controller: workCostController,
               hintText: '',
               isRequired: true,
             ),
