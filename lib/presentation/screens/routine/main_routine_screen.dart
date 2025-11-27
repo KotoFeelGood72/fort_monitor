@@ -29,7 +29,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
   String? selectedSize;
   String? selectedWarrantyType;
   String? selectedParameter;
-  String? selectedFileName = 'Счет №935385.pdf';
+  String? selectedFileName = '';
   final List<String> parameters = ['Параметр 1', 'Параметр 2', 'Параметр 3'];
   Map<String, Map<String, String>> warrantyValues = {
     'spare_part': {
@@ -97,18 +97,17 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
                 style: AppFonts.jostRegular.copyWith(fontSize: 20),
               ),
             ),
-            CustomRadioGroup(
+            CustomSelect(
               selectedValue: selectedServiceType,
-              onChanged: (value) {
-                setState(() {
-                  selectedServiceType = value;
-                });
+              hintText: 'Выберите ТС',
+              items: ['СТО', 'Сервисный центр', 'Выездной специалист'],
+              onChanged: (String? value) {
+                if (value != null) {
+                  setState(() {
+                    selectedServiceType = value;
+                  });
+                }
               },
-              options: const [
-                RadioOption(label: 'СТО', value: 'sto'),
-                RadioOption(label: 'Сервисный центр', value: 'service_center'),
-                RadioOption(label: 'Выездной специалист', value: 'out'),
-              ],
             ),
             SizedBox(height: 12),
             CustomInput(
@@ -144,7 +143,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
             ),
             SizedBox(height: 16),
             CustomInput(
-              label: 'Стоимость работ по замене',
+              label: 'Стоимость работ',
               type: InputType.text,
               controller: addressController,
               hintText: '',
@@ -160,7 +159,7 @@ class _MainRoutineScreenState extends State<MainRoutineScreen> {
             ),
             SizedBox(height: 31),
             CustomInput(
-              label: 'Дата замены',
+              label: 'Дата',
               type: InputType.date,
               controller: dateController,
               hintText: 'ДД.ММ.ГГГГ',

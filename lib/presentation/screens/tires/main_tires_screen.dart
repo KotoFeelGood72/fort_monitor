@@ -29,7 +29,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
   String? selectedSize;
   String? selectedWarrantyType;
   String? selectedParameter;
-  String? selectedFileName = 'Счет №935385.pdf';
+  String? selectedFileName = '';
   final List<String> parameters = ['Параметр 1', 'Параметр 2', 'Параметр 3'];
   Map<String, Map<String, String>> warrantyValues = {
     'spare_part': {
@@ -163,7 +163,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
             ),
             SizedBox(height: 10),
             CustomInput(
-              label: 'Стоимость работ по замене',
+              label: 'Стоимость работ',
               type: InputType.text,
               controller: addressController,
               hintText: '',
@@ -179,7 +179,7 @@ class _MainTiresScreenState extends State<MainTiresScreen> {
             ),
             SizedBox(height: 29),
             CustomInput(
-              label: 'Дата замены',
+              label: 'Дата',
               type: InputType.date,
               controller: dateController,
               hintText: 'ДД.ММ.ГГГГ',

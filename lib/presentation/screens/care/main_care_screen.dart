@@ -128,7 +128,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
             ),
             SizedBox(height: 15),
             CustomInput(
-              label: 'Стоимость работ по замене',
+              label: 'Стоимость работ',
               type: InputType.text,
               controller: workCostController,
               hintText: 'Введите стоимость',
@@ -144,7 +144,7 @@ class _MainCareScreenState extends State<MainCareScreen> {
             ),
             SizedBox(height: 33),
             CustomInput(
-              label: 'Дата замены',
+              label: 'Дата',
               type: InputType.date,
               controller: dateController,
               hintText: 'ДД.ММ.ГГГГ',

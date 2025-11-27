@@ -24,7 +24,7 @@ class SaveButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Сохранить',
+              'Применить',
               style: AppFonts.jostRegular.copyWith(fontSize: 20),
             ),
             const SizedBox(width: 9),

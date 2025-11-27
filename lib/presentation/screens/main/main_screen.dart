@@ -22,7 +22,7 @@ final List<MainItem> mainItems = [
   MainItem(title: 'Шины и диски', route: 'tires'),
   MainItem(title: 'Уход за авто', route: 'care'),
   MainItem(title: 'Заправки и пробег', route: 'refueling'),
-  MainItem(title: 'Отчеты', route: 'reports'),
+  // MainItem(title: 'Отчеты', route: 'reports'),
 ];
 
 @RoutePage()

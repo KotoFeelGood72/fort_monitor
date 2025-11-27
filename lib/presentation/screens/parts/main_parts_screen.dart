@@ -30,7 +30,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
   String? selectedBrand;
   String? selectedSize;
   String? selectedWarrantyType;
-  String? selectedFileName = 'Счет №935385.pdf';
+  String? selectedFileName = '';
   String serviceTypeInputValue = 'СТО';
   Map<String, Map<String, String>> warrantyValues = {
     'spare_part': {
@@ -181,7 +181,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             ),
             SizedBox(height: 10),
             CustomInput(
-              label: 'Стоимость работ по замене',
+              label: 'Стоимость работ',
               type: InputType.text,
               controller: replacementWorkCostController,
               hintText: '',
@@ -230,7 +230,7 @@ class _MainPartsScreenState extends State<MainPartsScreen> {
             ),
             SizedBox(height: 10),
             CustomInput(
-              label: 'Дата замены',
+              label: 'Дата',
               type: InputType.date,
               controller: dateController,
               hintText: 'ДД.ММ.ГГГГ',

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fort_monitor/presentation/theme/app_colors.dart';
 import 'package:fort_monitor/presentation/theme/app_fonts.dart';
 
 class CustomFileUpload extends StatelessWidget {
@@ -28,7 +30,7 @@ class CustomFileUpload extends StatelessWidget {
       FilePickerResult? result;
 
       try {
-        // Сначала попробуем с типом any
+        // Сначала попробуем с типом any для выбора любых документов
         result = await FilePicker.platform.pickFiles(
           type: FileType.any,
           allowMultiple: false,
@@ -57,6 +59,10 @@ class CustomFileUpload extends StatelessWidget {
     }
   }
 
+  void _removeFile() {
+    onFileRemoved?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     final hasFile = fileName != null && fileName!.isNotEmpty;
@@ -65,7 +71,7 @@ class CustomFileUpload extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
-          onTap: hasFile ? null : () => _pickFile(context),
+          onTap: () => _pickFile(context),
           child: Container(
             child: Row(
               spacing: 9,
@@ -75,22 +81,40 @@ class CustomFileUpload extends StatelessWidget {
                 Container(
                   width: 38,
                   height: 38,
-                  child: Image.asset(
-                    'assets/images/uploadFile.png',
-                    width: 24,
-                    height: 24,
-                    fit: BoxFit.contain,
-                  ),
+                  child: hasFile
+                      ? Image.asset(
+                          'assets/images/uploadFile.png',
+                          width: 24,
+                          height: 24,
+                          fit: BoxFit.contain,
+                        )
+                      : Icon(
+                          Icons.attach_file,
+                          size: 24,
+                          color: AppColors.grey,
+                        ),
                 ),
                 if (hasFile) ...[
                   Text(
                     fileName!,
                     style: AppFonts.jostMedium.copyWith(color: Colors.black87),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  GestureDetector(
+                    onTap: _removeFile,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      child: SvgPicture.asset(
+                        'assets/icons/close.svg',
+                        width: 16,
+                        height: 16,
+                      ),
+                    ),
                   ),
                 ] else ...[
                   Text(
-                    'Прикрепить счета (в формате PDF)',
-                    style: AppFonts.bodyLarge.copyWith(color: Colors.grey),
+                    'Прикрепить документ',
+                    style: AppFonts.bodyLarge.copyWith(color: AppColors.grey),
                   ),
                 ],
               ],
